@@ -1,22 +1,44 @@
 const fs = require('fs');
 
+const filename = 'revelation-7.txt';
+
 const replacements = {
+	' 1 ': ' one ',
+	' 2 ': ' two ',
+	' 3 ': ' three ',
+	' 4 ': ' four ',
+	' 5 ': ' five ',
+	' 6 ': ' six ',
+	' 7 ': ' seven ',
+	' 8 ': ' eight ',
+	' 9 ': ' nine ',
+	' 10 ': ' ten ',
+	'? Like, ': '? ',
+	'? Right? ': '? ',
 	'. Like, ': '. ',
 	'. Right? ': '. ',
 	'. Right?': '. ',
 	'. Right. ': '. ',
 	'. Right.': '. ',
+	'1st': 'first',
+	'2nd': 'second',
+	'3rd': 'third',
+	'4th': 'fourth',
+	'5th': 'fifth',
+	'6th': 'sixth',
+	'7th': 'seventh',
+	'8th': 'eighth',
+	'9th': 'ninth',
+	'10th': 'tenth',
 	"battle's": 'battle is',
 	"couldn't": 'could not',
 	"didn't": 'did not',
 	"doesn't": 'does not',
 	"don't": 'do not',
 	"God's": 'God is',
-	gotta: 'got to',
 	"haven't": 'have not',
 	"he's": 'he is',
 	"here's": 'here is',
-	i: 'I',
 	"I'd": 'I would',
 	"I'll": 'I will',
 	"I've": 'I have',
@@ -25,6 +47,7 @@ const replacements = {
 	"It'll": 'It will',
 	"it's": 'it is',
 	"let's": 'let us',
+	"nothing's": 'nothing is',
 	"one's": 'one is',
 	"she's": 'she is',
 	"that'd": 'that would',
@@ -36,6 +59,7 @@ const replacements = {
 	"they're": 'they are',
 	"they've": 'they have',
 	"wasn't": 'was not',
+	"we'd": 'We would',
 	"we'll": 'we will',
 	"we're": 'we are',
 	"we've": 'we have',
@@ -49,17 +73,14 @@ const replacements = {
 	"you'll": 'you will',
 	"you're": 'you are',
 	"you've": 'you have',
-	'1st': 'first',
-	'2nd': 'second',
-	'3rd': 'third',
 	gonna: 'going to',
+	gotta: 'got to',
+	i: 'I',
 	kinda: 'kind of',
 	wanna: 'want to',
 };
 
 const capitalizeWords = ['lord', 'god', 'holy spirit', 'christ', 'jesus', 'satan', 'devil'];
-
-const filename = 'revelation-6.txt';
 
 fs.readFile(filename, 'utf8', (err, data) => {
 	if (err) {
@@ -68,7 +89,6 @@ fs.readFile(filename, 'utf8', (err, data) => {
 	}
 	data = capitalizeSentence(data);
 	data = removeRight(data);
-	data = removeRepeatedWordsAndContractions(data);
 	data = capitalizeAfterAnd(data);
 	data = capitalizeAfterBut(data);
 	data = capitalizeAfterSo(data);
@@ -87,6 +107,8 @@ fs.readFile(filename, 'utf8', (err, data) => {
 			return matchCase(matched, newPhrase);
 		});
 	}
+
+	data = removeRepeatedWords(data);
 
 	// Capitalize specific words
 	capitalizeWords.forEach(word => {
@@ -114,7 +136,10 @@ function escapeRegExp(str) {
 
 // Function to match the case of the source string in the target string
 function matchCase(source, target) {
-	if (source === source.toUpperCase()) {
+	// Return target as is if source is numeric
+	if (!isNaN(source)) {
+		return target;
+	} else if (source === source.toUpperCase()) {
 		return target.toUpperCase();
 	} else if (source === source.toLowerCase()) {
 		return target.toLowerCase();
@@ -126,9 +151,9 @@ function matchCase(source, target) {
 	return target;
 }
 
-// Function to remove repeated words and contractions while preserving spaces and new lines
-function removeRepeatedWordsAndContractions(text) {
-	return text.replace(/(\b[\w']+\b)(?:(?=\s*[\w'])\s*\1)+/gi, '$1');
+// remove immediately repeated word sequences
+function removeRepeatedWords(text) {
+	return text.replace(/(\b(?:\w+\b\s*)+)(?=\1)/gi, '');
 }
 
 // Capitalize the word after "And" at the beginning of a sentence

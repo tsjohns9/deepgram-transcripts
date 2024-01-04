@@ -2,8 +2,8 @@
 # 2. Download .wav file. File will be named $VIDEO_ID.wav
 # 3. Get transcribed text. File will be $VIDEO_ID.txt
 export API_KEY=85b20971b3a90c8a2974e7d3ddbb655b19120950
-export VIDEO_ID=YhZrHOsr5lk
-export FILE_NAME="revelation-6"
+export VIDEO_ID=9gkjcxlH7J8
+export FILE_NAME="revelation-7"
 
 # This command takes about 20 minutes
 youtube-dl $VIDEO_ID --extract-audio --audio-format wav -o $FILE_NAME.wav
