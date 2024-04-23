@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const filename = 'revelation-7.txt';
+const filename = 'revelation-24.txt';
 
 const replacements = {
 	' 1 ': ' one ',
@@ -13,9 +13,7 @@ const replacements = {
 	' 8 ': ' eight ',
 	' 9 ': ' nine ',
 	' 10 ': ' ten ',
-	'? Like, ': '? ',
 	'? Right? ': '? ',
-	'. Like, ': '. ',
 	'. Right? ': '. ',
 	'. Right?': '. ',
 	'. Right. ': '. ',
@@ -35,8 +33,9 @@ const replacements = {
 	"didn't": 'did not',
 	"doesn't": 'does not',
 	"don't": 'do not',
-	"God's": 'God is',
+	"hasn't": 'has not',
 	"haven't": 'have not',
+	"he'll": 'he will',
 	"he's": 'he is',
 	"here's": 'here is',
 	"I'd": 'I would',
@@ -51,10 +50,12 @@ const replacements = {
 	"one's": 'one is',
 	"she's": 'she is',
 	"that'd": 'that would',
+	"that'll": 'that will',
 	"that's": 'that is',
 	"there'd": 'there would',
 	"there'll": 'there will',
 	"there's": 'there is',
+	"they'd": 'they would',
 	"they'll": 'they will',
 	"they're": 'they are',
 	"they've": 'they have',
@@ -65,7 +66,9 @@ const replacements = {
 	"we've": 'we have',
 	"weren't": 'were not',
 	"what's": 'what is',
+	"who'd": 'who would',
 	"who's": 'who is',
+	"who've": 'who have',
 	"won't": 'will not',
 	"wouldn't": 'would not',
 	"you'd": 'you would',
@@ -89,9 +92,10 @@ fs.readFile(filename, 'utf8', (err, data) => {
 	}
 	data = capitalizeSentence(data);
 	data = removeRight(data);
-	data = capitalizeAfterAnd(data);
 	data = capitalizeAfterBut(data);
+	data = capitalizeAfterAnd(data);
 	data = capitalizeAfterSo(data);
+	data = capitalizeAfterLike(data);
 	data = lowercaseAfterComma(data);
 	// data = capitalizeSentence2(data);
 
@@ -190,6 +194,23 @@ function capitalizeAfterBut(inputString) {
 	);
 }
 
+// Capitalize the word after "Like" at the beginning of a sentence
+function capitalizeAfterLike(inputString) {
+	inputString = inputString.replace(/\. Like,? (\w+)/g, (match, word) => {
+		return '. ' + word.charAt(0).toUpperCase() + word.slice(1);
+	});
+
+	inputString = inputString.replace(/\? Like,? (\w+)/g, (match, word) => {
+		return '. ' + word.charAt(0).toUpperCase() + word.slice(1);
+	});
+
+	// Match the word after "Like" at the beginning of a line or after a new line
+	return inputString.replace(
+		/(\n|^)\s*Like\s+(\w+)/g,
+		(match, newline, group) => `\n\n${group.charAt(0).toUpperCase()}${group.slice(1)}`
+	);
+}
+
 // Capitalize the word after "So" at the beginning of a sentence
 function capitalizeAfterSo(inputString) {
 	inputString = inputString.replace(/\. So,? (\w+)/g, (match, word) => {
@@ -225,8 +246,3 @@ function lowercaseAfterComma(inputString) {
 		(match, group) => `, ${group.toLowerCase()}`
 	);
 }
-
-// Match a period followed by a space and a word that is not capitalized
-// function capitalizeSentence2(inputString) {
-// 	return inputString.replace(/\. (\b[a-z])/g, (match, group) => `. ${group.toUpperCase()}`);
-// }
