@@ -1,9 +1,10 @@
 const fs = require('fs');
 
-const filename = 'revelation-24.txt';
+const filename = 'samson-9.txt';
 
 const replacements = {
 	' 1 ': ' one ',
+	' 10 ': ' ten ',
 	' 2 ': ' two ',
 	' 3 ': ' three ',
 	' 4 ': ' four ',
@@ -12,12 +13,13 @@ const replacements = {
 	' 7 ': ' seven ',
 	' 8 ': ' eight ',
 	' 9 ': ' nine ',
-	' 10 ': ' ten ',
 	'? Right? ': '? ',
 	'. Right? ': '. ',
 	'. Right?': '. ',
 	'. Right. ': '. ',
 	'. Right.': '. ',
+	', Right?': '.',
+	'10th': 'tenth',
 	'1st': 'first',
 	'2nd': 'second',
 	'3rd': 'third',
@@ -27,7 +29,6 @@ const replacements = {
 	'7th': 'seventh',
 	'8th': 'eighth',
 	'9th': 'ninth',
-	'10th': 'tenth',
 	"battle's": 'battle is',
 	"couldn't": 'could not',
 	"didn't": 'did not',
@@ -83,7 +84,26 @@ const replacements = {
 	wanna: 'want to',
 };
 
-const capitalizeWords = ['lord', 'god', 'holy spirit', 'christ', 'jesus', 'satan', 'devil'];
+const capitalizeWords = [
+	'christ',
+	'dan',
+	'david',
+	'devil',
+	'god',
+	'holy spirit',
+	'israel',
+	'israelites',
+	'jehovah',
+	'jesus',
+	'lord',
+	'moses',
+	'samson',
+	'samuel',
+	'satan',
+	'saul',
+	'solomon',
+	'yahweh',
+];
 
 fs.readFile(filename, 'utf8', (err, data) => {
 	if (err) {
