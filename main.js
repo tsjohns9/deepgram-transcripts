@@ -43,6 +43,7 @@ async function main() {
 			audioFormat: 'wav',
 			output: wavFile,
 		});
+
 		await estimator(p1, `downloading ${videoId}`);
 		console.log(`downloaded ${wavFile}`);
 
