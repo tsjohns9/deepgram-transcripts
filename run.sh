@@ -1,7 +1,7 @@
 # 1. Change VIDEO_ID to use new video
 # 2. Download .wav file. File will be named $VIDEO_ID.wav
 # 3. Get transcribed text. File will be $VIDEO_ID.txt
-export API_KEY=85b20971b3a90c8a2974e7d3ddbb655b19120950
+export API_KEY="KEY"
 export VIDEO_ID="V3YYnMT4ouE"
 export FILE_NAME="samson-9"
 
