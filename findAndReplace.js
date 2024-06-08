@@ -1,7 +1,5 @@
 const fs = require('fs');
 
-const filename = 'samson-9.txt';
-
 const replacements = {
 	' 1 ': ' one ',
 	' 10 ': ' ten ',
@@ -105,53 +103,57 @@ const capitalizeWords = [
 	'yahweh',
 ];
 
-fs.readFile(filename, 'utf8', (err, data) => {
-	if (err) {
-		console.error('Error reading the file:', err);
-		return;
-	}
-	data = capitalizeSentence(data);
-	data = removeRight(data);
-	data = capitalizeAfterBut(data);
-	data = capitalizeAfterAnd(data);
-	data = capitalizeAfterSo(data);
-	data = capitalizeAfterLike(data);
-	data = lowercaseAfterComma(data);
-	// data = capitalizeSentence2(data);
-
-	// Iterate over the replacements and perform substitution
-	for (const oldPhrase in replacements) {
-		const newPhrase = replacements[oldPhrase];
-		const escapedOldPhrase = escapeRegExp(oldPhrase);
-		const pattern = new RegExp(escapedOldPhrase, 'gi');
-
-		// Perform the substitution with preserved capitalization
-		data = data.replace(pattern, matched => {
-			// Preserve the original capitalization of the matched phrase
-			return matchCase(matched, newPhrase);
-		});
-	}
-
-	data = removeRepeatedWords(data);
-
-	// Capitalize specific words
-	capitalizeWords.forEach(word => {
-		const escapedWord = escapeRegExp(word);
-		const pattern = new RegExp(`\\b${escapedWord}\\b`, 'g');
-		data = data.replace(pattern, matched => {
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		});
-	});
-
-	// Write the modified content back to the same file
-	fs.writeFile(filename, data, 'utf8', err => {
+const findAndReplace = fileName => {
+	fs.readFile(fileName, 'utf8', (err, data) => {
 		if (err) {
-			console.error('Error writing to the file:', err);
+			console.error('Error reading the file:', err);
 			return;
 		}
-		console.log('Replacements and removal of repeated words completed. File updated successfully.');
+		data = capitalizeSentence(data);
+		data = removeRight(data);
+		data = capitalizeAfterBut(data);
+		data = capitalizeAfterAnd(data);
+		data = capitalizeAfterSo(data);
+		data = capitalizeAfterLike(data);
+		data = lowercaseAfterComma(data);
+		// data = capitalizeSentence2(data);
+
+		// Iterate over the replacements and perform substitution
+		for (const oldPhrase in replacements) {
+			const newPhrase = replacements[oldPhrase];
+			const escapedOldPhrase = escapeRegExp(oldPhrase);
+			const pattern = new RegExp(escapedOldPhrase, 'gi');
+
+			// Perform the substitution with preserved capitalization
+			data = data.replace(pattern, matched => {
+				// Preserve the original capitalization of the matched phrase
+				return matchCase(matched, newPhrase);
+			});
+		}
+
+		data = removeRepeatedWords(data);
+
+		// Capitalize specific words
+		capitalizeWords.forEach(word => {
+			const escapedWord = escapeRegExp(word);
+			const pattern = new RegExp(`\\b${escapedWord}\\b`, 'g');
+			data = data.replace(pattern, matched => {
+				return word.charAt(0).toUpperCase() + word.slice(1);
+			});
+		});
+
+		// Write the modified content back to the same file
+		fs.writeFile(fileName, data, 'utf8', err => {
+			if (err) {
+				console.error('Error writing to the file:', err);
+				return;
+			}
+			console.log(
+				'Replacements and removal of repeated words completed. File updated successfully.'
+			);
+		});
 	});
-});
+};
 
 // Function to escape special characters in a regular expression pattern
 function escapeRegExp(str) {
@@ -266,3 +268,5 @@ function lowercaseAfterComma(inputString) {
 		(match, group) => `, ${group.toLowerCase()}`
 	);
 }
+
+module.exports = findAndReplace;
