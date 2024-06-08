@@ -9,10 +9,11 @@ const findAndReplace = require('./findAndReplace');
 
 program
 	.option('--videoId <id>', 'The YouTube video ID')
-	.option('--fileName <name>', 'The name to use for the .wav file and the transcript');
+	.option('--fileName <name>', 'The name to use for the .wav file and the transcript')
+	.option('--updateTranscript [value]', 'Set to true to modify the transcript', false);
 
 program.parse();
-const { videoId, fileName } = program.opts();
+const { videoId, fileName, updateTranscript } = program.opts();
 if (!videoId || !fileName) {
 	console.error('Error: Please provide both --videoId and --fileName.');
 	program.help(); // Display usage information
@@ -54,12 +55,15 @@ async function main() {
 		}
 
 		const content = result.results.channels[0].alternatives[0].paragraphs.transcript;
-		const originalTranscript = `${outDir}/${fileName}-original.txt`;
-		const transcript = `${outDir}/${fileName}.txt`;
+		const originalTranscriptFile = `${outDir}/${fileName}-original.txt`;
+		const transcriptFile = `${outDir}/${fileName}.txt`;
 
-		fs.writeFileSync(originalTranscript, content);
-		fs.copyFileSync(originalTranscript, transcript);
-		findAndReplace(transcript);
+		fs.writeFileSync(transcriptFile, content);
+		if (updateTranscript) {
+			console.log('running findAndReplace');
+			findAndReplace(transcriptFile);
+			fs.copyFileSync(transcriptFile, originalTranscriptFile);
+		}
 
 		console.log(`Saved transcript to ${fileName}.txt`);
 	} catch (error) {
