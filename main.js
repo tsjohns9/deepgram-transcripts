@@ -16,7 +16,7 @@ program.parse();
 const { videoId, fileName, updateTranscript } = program.opts();
 if (!videoId || !fileName) {
 	console.error('Error: Please provide both --videoId and --fileName.');
-	program.help(); // Display usage information
+	program.help();
 }
 
 const estimator = progressEstimator({ log: false });

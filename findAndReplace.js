@@ -27,7 +27,6 @@ const replacements = {
 	'7th': 'seventh',
 	'8th': 'eighth',
 	'9th': 'ninth',
-	"battle's": 'battle is',
 	"couldn't": 'could not',
 	"didn't": 'did not',
 	"doesn't": 'does not',
@@ -71,7 +70,6 @@ const replacements = {
 	"won't": 'will not',
 	"wouldn't": 'would not',
 	"you'd": 'you would',
-	"You'd": 'You would',
 	"you'll": 'you will',
 	"you're": 'you are',
 	"you've": 'you have',
@@ -116,7 +114,6 @@ const findAndReplace = fileName => {
 		data = capitalizeAfterSo(data);
 		data = capitalizeAfterLike(data);
 		data = lowercaseAfterComma(data);
-		// data = capitalizeSentence2(data);
 
 		// Iterate over the replacements and perform substitution
 		for (const oldPhrase in replacements) {
