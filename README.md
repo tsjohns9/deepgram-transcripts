@@ -45,7 +45,7 @@ Save the deepgram-api key into the .env file
 echo "DEEPGRAM_KEY=85b20971b3a90c8a2974e7d3ddbb655b19120950" > .env
 ```
 
-Go to the YouTube video and get the `video_id` from the URL
+Go to the YouTube video and get the `videoId` from the URL
 
 ![youtube](./url.png)
 
