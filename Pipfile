@@ -1,0 +1,14 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+deepgram-sdk = "==3.*"
+python-dotenv = "==1.0.0"
+yt-dlp = "==2024.05.27"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
