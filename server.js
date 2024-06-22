@@ -58,7 +58,6 @@ app.get('/transcript', async (req, res) => {
 			.send({ message: `missing video or email parameter. video: ${video} email: ${email}` });
 	}
 	res.status(200).send();
-
 	console.log('received request:', video, email);
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
