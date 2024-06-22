@@ -5,11 +5,6 @@ const path = require('path');
 
 const findAndReplace = require('./findAndReplace');
 
-const outDir = 'outputs';
-if (!fs.existsSync(outDir)) {
-	fs.mkdirSync(outDir);
-}
-
 const deepgram = createClient(process.env.DEEPGRAM_KEY);
 const options = {
 	smart_format: true,
@@ -22,6 +17,10 @@ const options = {
 
 module.exports = async function generateTranscript(videoId, updateTranscript) {
 	try {
+		const outDir = 'outputs';
+		if (!fs.existsSync(outDir)) {
+			fs.mkdirSync(outDir);
+		}
 		const videoInfo = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
 			dumpSingleJson: true,
 		});
@@ -37,6 +36,7 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 		});
 
 		console.log(`downloaded ${wavFile}`);
+		console.log('generating transcript');
 
 		const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
 			fs.createReadStream(wavFile),
@@ -47,8 +47,7 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 		}
 
 		const content = result.results.channels[0].alternatives[0].paragraphs.transcript;
-		const originalTranscriptFile = `${outDir}/${videoTitle}-original.txt`;
-		console.log('originalTranscriptFile: ', originalTranscriptFile);
+		const originalTranscriptFile = '';
 		const transcriptFile = `${outDir}/${videoTitle}.txt`;
 		console.log('transcriptFile: ', transcriptFile);
 
@@ -56,6 +55,8 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 		if (updateTranscript) {
 			console.log('running findAndReplace');
 			findAndReplace(transcriptFile);
+			originalTranscriptFile = `${outDir}/${videoTitle}-original.txt`;
+			console.log('originalTranscriptFile: ', originalTranscriptFile);
 			fs.copyFileSync(transcriptFile, originalTranscriptFile);
 		}
 

@@ -30,25 +30,12 @@ async function sendEmail(to, subject, text, ...attachmentPaths) {
 		text: text,
 		to: to,
 	};
+	console.log('sending transcript to ', to);
 	await transporter.sendMail(mailOptions);
 }
 
 app.get('/', (req, res) => {
-	const htmlContent = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Deepgram Transcripts</title>
-    </head>
-    <body>
-      <p>Generate a Trancript</p>
-    </body>
-    </html>
-  `;
-
-	res.send(htmlContent);
+	res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/transcript', async (req, res) => {
@@ -58,7 +45,7 @@ app.get('/transcript', async (req, res) => {
 			.status(400)
 			.send({ message: `missing video or email parameter. video: ${video} email: ${email}` });
 	}
-	res.status(200).send();
+	res.status(200).send('Ok');
 	console.log('received request:', video, email);
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
@@ -66,15 +53,21 @@ app.get('/transcript', async (req, res) => {
 			false
 		);
 
+		const files = [transcriptFile];
+		if (originalTranscriptFile) {
+			files.push(originalTranscriptFile);
+		}
+
 		await sendEmail(
 			email,
 			`Transcript for ${videoTitle}`,
 			`Transcript for ${videoTitle}`,
-			transcriptFile,
-			originalTranscriptFile
+			...files
 		);
-		fs.rmdirSync('./outputs', { recursive: true });
+		fs.rm('./outputs', { recursive: true });
 		fs.mkdirSync('./outputs', { recursive: true });
+		console.log('files removed');
+		console.log('------ done');
 	} catch (e) {
 		console.error(`request failed: ${e}`);
 		return;
