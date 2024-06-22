@@ -11,25 +11,25 @@ const app = express();
 app.use(bodyParser.json());
 
 async function sendEmail(to, subject, text, ...attachmentPaths) {
-	// const attachments = attachmentPaths.map(filePath => ({
-	// 	filename: path.basename(filePath),
-	// 	path: filePath,
-	// }));
-	// const transporter = nodemailer.createTransport({
-	// 	service: 'gmail',
-	// 	auth: {
-	// 		user: process.env.EMAIL_USER,
-	// 		pass: process.env.EMAIL_PASS,
-	// 	},
-	// });
-	// const mailOptions = {
-	// 	attachments,
-	// 	from: process.env.EMAIL_USER,
-	// 	subject: subject,
-	// 	text: text,
-	// 	to: to,
-	// };
-	// await transporter.sendMail(mailOptions);
+	const attachments = attachmentPaths.map(filePath => ({
+		filename: path.basename(filePath),
+		path: filePath,
+	}));
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: process.env.EMAIL_USER,
+			pass: process.env.EMAIL_PASS,
+		},
+	});
+	const mailOptions = {
+		attachments,
+		from: process.env.EMAIL_USER,
+		subject: subject,
+		text: text,
+		to: to,
+	};
+	await transporter.sendMail(mailOptions);
 }
 
 app.get('/', (req, res) => {

@@ -20,6 +20,17 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
+# Install Python and necessary tools
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install youtube-dl
+RUN apt-get update && \
+	apt-get install -y youtube-dl && \
+	rm -rf /var/lib/apt/lists/*
+
 # Install node modules
 COPY --link package-lock.json package.json ./
 RUN npm ci
