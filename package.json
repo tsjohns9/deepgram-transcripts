@@ -16,5 +16,8 @@
     "express": "^4.19.2",
     "nodemailer": "^6.9.13",
     "youtube-dl-exec": "^3.0.2"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7"
   }
 }

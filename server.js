@@ -32,6 +32,24 @@ async function sendEmail(to, subject, text, ...attachmentPaths) {
 	// await transporter.sendMail(mailOptions);
 }
 
+app.get('/', (req, res) => {
+	const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Deepgram Transcripts</title>
+    </head>
+    <body>
+      <p>Generate a Trancript</p>
+    </body>
+    </html>
+  `;
+
+	res.send(htmlContent);
+});
+
 app.get('/transcript', async (req, res) => {
 	const { video, email } = req.query;
 	if (!video || !email) {

@@ -1,4 +1,23 @@
-# Getting Started
-pipenv install
+# Run
 
-python main.py --video_id $VIDEO_ID
+Start the server
+```
+node server.js
+```
+
+Or use from the CLI
+```
+node transcript.js
+```
+
+# Deploy app
+
+```
+fly deploy
+```
+
+# Set env vars
+
+```
+flyctl secrets set $KEY=$VALUE -a deepgram-transcripts
+```
