@@ -45,7 +45,7 @@ app.get('/transcript', async (req, res) => {
 			.status(400)
 			.send({ message: `missing video or email parameter. video: ${video} email: ${email}` });
 	}
-	res.status(200).send('Ok');
+	res.status(200).send({ status: 'Ok' });
 	console.log('received request:', video, email);
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
@@ -64,7 +64,7 @@ app.get('/transcript', async (req, res) => {
 			`Transcript for ${videoTitle}`,
 			...files
 		);
-		fs.rm('./outputs', { recursive: true });
+		fs.rmSync('./outputs', { recursive: true });
 		fs.mkdirSync('./outputs', { recursive: true });
 		console.log('files removed');
 		console.log('------ done');

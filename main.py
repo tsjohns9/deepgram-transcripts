@@ -54,7 +54,7 @@ def main(deepgram_key, video_id):
     output_file = os.path.join(out_dir, f"{video_id}")
     download_yt_audio(video_id, output_file)
 
-    with open(f"{output_file}.wav", "rb") as file:
+    with open(f"{output_file}.webm", "rb") as file:
         buffer_data = file.read()
 
     print("downloading transcript")

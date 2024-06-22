@@ -41,7 +41,11 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
         python3 \
         python3-pip \
+				curl \
         && rm -rf /var/lib/apt/lists/*
+
+# Install yt-dlp
+RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 
 # Copy built application from build stage
 COPY --from=build /app /app

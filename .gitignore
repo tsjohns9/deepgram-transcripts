@@ -1,5 +1,6 @@
 *.txt
 *.wav
+*.webm
 node_modules/
 outputs/
 .DS_STORE
