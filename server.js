@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
@@ -72,6 +73,8 @@ app.get('/transcript', async (req, res) => {
 			transcriptFile,
 			originalTranscriptFile
 		);
+		fs.rmdirSync('./outputs', { recursive: true });
+		fs.mkdirSync('./outputs', { recursive: true });
 	} catch (e) {
 		console.error(`request failed: ${e}`);
 		return;
