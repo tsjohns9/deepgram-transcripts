@@ -21,3 +21,7 @@ fly deploy
 ```
 flyctl secrets set $KEY=$VALUE -a deepgram-transcripts
 ```
+
+# SSH to server
+
+flyctl ssh console -a deepgram-transcripts

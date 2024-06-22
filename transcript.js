@@ -25,8 +25,10 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 		const videoInfo = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
 			dumpSingleJson: true,
 		});
+		console.log('videoInfo.title: ', videoInfo.title);
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
 		const wavFile = path.join(outDir, `${videoTitle}.wav`);
+		console.log('wavFile: ', wavFile);
 
 		await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
 			audioFormat: 'wav',
@@ -46,7 +48,9 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 
 		const content = result.results.channels[0].alternatives[0].paragraphs.transcript;
 		const originalTranscriptFile = `${outDir}/${videoTitle}-original.txt`;
+		console.log('originalTranscriptFile: ', originalTranscriptFile);
 		const transcriptFile = `${outDir}/${videoTitle}.txt`;
+		console.log('transcriptFile: ', transcriptFile);
 
 		fs.writeFileSync(transcriptFile, content);
 		if (updateTranscript) {
@@ -62,6 +66,6 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 			originalTranscriptFile,
 		};
 	} catch (error) {
-		console.error(error.message);
+		console.error('transcript.js', error.message);
 	}
 };

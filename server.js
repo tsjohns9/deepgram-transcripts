@@ -65,6 +65,7 @@ app.get('/transcript', async (req, res) => {
 			video,
 			false
 		);
+
 		await sendEmail(
 			email,
 			`Transcript for ${videoTitle}`,
