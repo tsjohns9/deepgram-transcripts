@@ -47,10 +47,8 @@ app.post('/transcript', async (req, res) => {
 	}
 	res.status(200).send({ status: 'Ok' });
 	const decodedVideoUrl = decodeURIComponent(video);
-	const decodedEmail = email.replace(/&#(\d+);/g, function (_, dec) {
-		return String.fromCharCode(dec);
-	});
-	console.log('received request:', video, decodedEmail);
+	const decodedEmail = decodeURIComponent(email);
+	console.log('received request:', decodedVideoUrl, decodedEmail);
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
 			decodedVideoUrl,
