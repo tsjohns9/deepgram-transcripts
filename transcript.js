@@ -26,7 +26,7 @@ module.exports = async function generateTranscript(videoId, updateTranscript) {
 		});
 		console.log('videoInfo.title: ', videoInfo.title);
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
-		const wavFile = path.join(outDir, `${videoTitle}.webm`);
+		const wavFile = path.join(outDir, `${videoTitle}.wav`);
 
 		const r = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
 			audioFormat: 'wav',
