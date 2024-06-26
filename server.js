@@ -38,8 +38,8 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/transcript', async (req, res) => {
-	const { video, email } = req.query;
+app.post('/transcript', async (req, res) => {
+	const { video, email, updateTranscript = false } = req.body;
 	if (!video || !email) {
 		return res
 			.status(400)
@@ -50,7 +50,7 @@ app.get('/transcript', async (req, res) => {
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
 			video,
-			false
+			updateTranscript
 		);
 
 		const files = [transcriptFile];

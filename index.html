@@ -82,8 +82,8 @@
 	<div class="container">
 		<h2>Request Transcript</h2>
 		<form id="transcriptForm">
-			<label for="videoId">Video ID:</label>
-			<input type="text" id="videoId" name="videoId" required>
+			<label for="videoUrl">Video ID:</label>
+			<input type="text" id="videoUrl" name="videoUrl" required>
 
 			<label for="email">Email:</label>
 			<input type="email" id="email" name="email" required>
@@ -96,19 +96,24 @@
 	<script>
 		document.getElementById("transcriptForm").addEventListener("submit", function (event) {
 			event.preventDefault();
-			var videoId = document.getElementById("videoId").value;
-			var email = document.getElementById("email").value;
+			const videoUrl = document.getElementById("videoUrl").value;
+			const email = document.getElementById("email").value;
 
-			var encodedvideoId = encodeURIComponent(videoId);
-			var encodedEmail = encodeURIComponent(email);
+			const encodedvideoUrl = encodeURIComponent(videoUrl);
+			const encodedEmail = encodeURIComponent(email);
 
-			var url = `/transcript?video=${encodedvideoId}&email=${encodedEmail}`;
+			// Construct the request body
+			const requestBody = JSON.stringify({
+				video: encodedvideoUrl,
+				email: encodedEmail
+			});
 
-			fetch(url, {
-				method: 'GET',
+			fetch('/transcript', {
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
+				body: requestBody
 			})
 				.then(response => {
 					if (!response.ok) {
@@ -124,7 +129,8 @@
 					showMessage('error', 'Error submitting transcript request.');
 					console.error('Error:', error); // Handle error
 				});
-		});
+		}
+		);
 
 		function showMessage(type, message) {
 			var messageContainer = document.getElementById('messageContainer');

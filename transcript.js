@@ -15,20 +15,20 @@ const options = {
 	model: 'nova-2',
 };
 
-module.exports = async function generateTranscript(videoId, updateTranscript) {
+module.exports = async function generateTranscript(videoUrl, updateTranscript) {
 	try {
 		const outDir = 'outputs';
 		if (!fs.existsSync(outDir)) {
 			fs.mkdirSync(outDir);
 		}
-		const videoInfo = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
+		const videoInfo = await youtubedl(videoUrl, {
 			dumpSingleJson: true,
 		});
 		console.log('videoInfo.title: ', videoInfo.title);
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
 		const wavFile = path.join(outDir, `${videoTitle}.wav`);
 
-		const r = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
+		const r = await youtubedl(videoUrl, {
 			audioFormat: 'wav',
 			format: 'bestaudio/best',
 			extractAudio: true,
