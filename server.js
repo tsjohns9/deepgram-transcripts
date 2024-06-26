@@ -46,10 +46,14 @@ app.post('/transcript', async (req, res) => {
 			.send({ message: `missing video or email parameter. video: ${video} email: ${email}` });
 	}
 	res.status(200).send({ status: 'Ok' });
-	console.log('received request:', video, email);
+	const decodedVideoUrl = decodeURIComponent(video);
+	const decodedEmail = email.replace(/&#(\d+);/g, function (_, dec) {
+		return String.fromCharCode(dec);
+	});
+	console.log('received request:', video, decodedEmail);
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
-			video,
+			decodedVideoUrl,
 			'',
 			updateTranscript
 		);
@@ -59,7 +63,7 @@ app.post('/transcript', async (req, res) => {
 			files.push(originalTranscriptFile);
 		}
 
-		await sendEmail(email, `Transcript for ${videoTitle}`, ...files);
+		await sendEmail(decodedEmail, `Transcript for ${videoTitle}`, ...files);
 		fs.rmSync('./outputs', { recursive: true });
 		fs.mkdirSync('./outputs', { recursive: true });
 		console.log('files removed');
