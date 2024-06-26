@@ -11,7 +11,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-async function sendEmail(to, subject, text, ...attachmentPaths) {
+async function sendEmail(to, subject, ...attachmentPaths) {
 	const attachments = attachmentPaths.map(filePath => ({
 		filename: path.basename(filePath),
 		path: filePath,
@@ -27,14 +27,14 @@ async function sendEmail(to, subject, text, ...attachmentPaths) {
 		attachments,
 		from: process.env.EMAIL_USER,
 		subject: subject,
-		text: text,
+		text: subject,
 		to: to,
 	};
 	console.log('sending transcript to ', to);
 	await transporter.sendMail(mailOptions);
 }
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -50,6 +50,7 @@ app.post('/transcript', async (req, res) => {
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
 			video,
+			'',
 			updateTranscript
 		);
 
@@ -58,12 +59,7 @@ app.post('/transcript', async (req, res) => {
 			files.push(originalTranscriptFile);
 		}
 
-		await sendEmail(
-			email,
-			`Transcript for ${videoTitle}`,
-			`Transcript for ${videoTitle}`,
-			...files
-		);
+		await sendEmail(email, `Transcript for ${videoTitle}`, ...files);
 		fs.rmSync('./outputs', { recursive: true });
 		fs.mkdirSync('./outputs', { recursive: true });
 		console.log('files removed');

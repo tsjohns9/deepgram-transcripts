@@ -7,7 +7,7 @@ node server.js
 
 Or use from the CLI
 ```
-node transcript.js
+node cli.js
 ```
 
 # Deploy app

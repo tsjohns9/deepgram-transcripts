@@ -13,4 +13,4 @@ if (!videoId) {
 	program.help();
 }
 
-generateTranscript(videoId, updateTranscript);
+generateTranscript('', videoId, updateTranscript);

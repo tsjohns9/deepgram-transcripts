@@ -7,28 +7,33 @@ const findAndReplace = require('./findAndReplace');
 
 const deepgram = createClient(process.env.DEEPGRAM_KEY);
 const options = {
-	smart_format: true,
-	punctuate: true,
-	paragraphs: true,
-	utterances: true,
 	language: 'en',
 	model: 'nova-2',
+	numerals: true,
+	paragraphs: true,
+	punctuate: true,
+	smart_format: true,
+	utterances: true,
 };
 
-module.exports = async function generateTranscript(videoUrl, updateTranscript) {
+module.exports = async function generateTranscript(videoUrl, videoId, updateTranscript) {
 	try {
 		const outDir = 'outputs';
 		if (!fs.existsSync(outDir)) {
 			fs.mkdirSync(outDir);
 		}
-		const videoInfo = await youtubedl(videoUrl, {
+		let video = videoUrl;
+		if (videoId) {
+			video = `https://www.youtube.com/watch?v=${videoId}`;
+		}
+		const videoInfo = await youtubedl(video, {
 			dumpSingleJson: true,
 		});
 		console.log('videoInfo.title: ', videoInfo.title);
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
 		const wavFile = path.join(outDir, `${videoTitle}.wav`);
 
-		await youtubedl(videoUrl, {
+		await youtubedl(video, {
 			audioFormat: 'wav',
 			format: 'bestaudio/best',
 			extractAudio: true,
