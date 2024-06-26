@@ -28,15 +28,12 @@ module.exports = async function generateTranscript(videoUrl, updateTranscript) {
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
 		const wavFile = path.join(outDir, `${videoTitle}.wav`);
 
-		const r = await youtubedl(videoUrl, {
+		await youtubedl(videoUrl, {
 			audioFormat: 'wav',
 			format: 'bestaudio/best',
 			extractAudio: true,
 			output: `${outDir}/${videoTitle}.%(ext)s`,
 		});
-		console.log('downloaded wav file result: ', r);
-
-		readFiles();
 
 		console.log(`downloaded ${wavFile}`);
 		console.log('generating transcript');
@@ -72,12 +69,4 @@ module.exports = async function generateTranscript(videoUrl, updateTranscript) {
 	} catch (error) {
 		console.error('transcript.js', error.message);
 	}
-};
-
-const readFiles = function () {
-	const files = fs.readdirSync('./outputs');
-	console.log('Contents of directory:');
-	files.forEach(file => {
-		console.log(file);
-	});
 };
