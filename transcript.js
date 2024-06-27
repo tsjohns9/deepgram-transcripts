@@ -72,6 +72,7 @@ module.exports = async function generateTranscript(videoUrl, videoId, updateTran
 			originalTranscriptFile,
 		};
 	} catch (error) {
-		console.error('transcript.js', error.message);
+		console.error('failed to generate a transcript:', error.message);
+		throw new Error('failed to generate a transcript');
 	}
 };

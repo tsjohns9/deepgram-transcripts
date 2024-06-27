@@ -68,6 +68,7 @@ app.post('/transcript', async (req, res) => {
 		console.log('------ done');
 	} catch (e) {
 		console.error(`request failed: ${e}`);
+		await sendEmail(decodedEmail, `Failed to generate transcript`);
 		return;
 	}
 });
