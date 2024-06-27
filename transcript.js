@@ -16,19 +16,14 @@ const options = {
 	utterances: true,
 };
 
-module.exports = async function generateTranscript(videoUrl, videoId, updateTranscript) {
+// video can be a full youtube url or the youtube video id
+module.exports = async function generateTranscript(video, updateTranscript) {
 	try {
 		const outDir = 'outputs';
 		if (!fs.existsSync(outDir)) {
 			fs.mkdirSync(outDir);
 		}
-		let video = videoUrl;
-		if (videoId) {
-			video = `https://www.youtube.com/watch?v=${videoId}`;
-		}
-		const videoInfo = await youtubedl(video, {
-			dumpSingleJson: true,
-		});
+		const videoInfo = await youtubedl(video, { dumpSingleJson: true });
 		console.log('videoInfo.title: ', videoInfo.title);
 		const videoTitle = videoInfo.title.replace(/ /g, '_');
 		const wavFile = path.join(outDir, `${videoTitle}.wav`);

@@ -60,7 +60,6 @@ app.post('/transcript', async (req, res) => {
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
 			decodedVideoUrl,
-			'',
 			updateTranscript
 		);
 
@@ -76,7 +75,7 @@ app.post('/transcript', async (req, res) => {
 		console.log('------ done');
 	} catch (e) {
 		console.error(`request failed: ${e}`);
-		await sendEmail(decodedEmail, `Failed to generate transcript`);
+		await sendEmail('johnsontrevor55@gmail.com', `Failed to generate transcript.`);
 		return;
 	}
 });

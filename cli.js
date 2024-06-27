@@ -9,8 +9,8 @@ program
 program.parse();
 const { videoId, updateTranscript } = program.opts();
 if (!videoId) {
-	console.error('Error: Please provide both --videoId and --fileName.');
+	console.error('Error: videoId is required');
 	program.help();
 }
 
-generateTranscript('', videoId, updateTranscript);
+generateTranscript(videoId, updateTranscript);
