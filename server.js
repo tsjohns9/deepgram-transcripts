@@ -11,6 +11,8 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const allowedEmails = ['johnsontrevor55@gmail.com', 'mnolen87@gmail.com', 'oanders222@gmail.com'];
+
 async function sendEmail(to, subject, ...attachmentPaths) {
 	const attachments = attachmentPaths.map(filePath => ({
 		filename: path.basename(filePath),
@@ -49,6 +51,12 @@ app.post('/transcript', async (req, res) => {
 	const decodedVideoUrl = decodeURIComponent(video);
 	const decodedEmail = decodeURIComponent(email);
 	console.log('received request:', decodedVideoUrl, decodedEmail);
+
+	if (!allowedEmails.includes(decodedEmail)) {
+		console.error(`email ${decodedEmail} is not authorized`);
+		return;
+	}
+
 	try {
 		const { videoTitle, transcriptFile, originalTranscriptFile } = await generateTranscript(
 			decodedVideoUrl,
